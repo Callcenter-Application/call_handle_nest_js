@@ -11,6 +11,10 @@ const findUser = (id: number) => {
   return fakeDB.find(user => (user.id === id) )
 }
 
+const findUserIndex = (id: number) => {
+  return fakeDB.findIndex(user => (user.id === id))
+}
+
 @Injectable()
 export class UserService {
   create(createUserDto: CreateUserDto) {
@@ -28,13 +32,13 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    const userToUpdate = findUser(id);
-    
+    const userToUpdate = findUserIndex(id)
+    fakeDB[userToUpdate] = updateUserDto
     return `This action updates a #${id} user`;
   }
 
   remove(id: number) {
-    const userToDelete = fakeDB.findIndex(user => (user.id === id))
+    const userToDelete = findUserIndex(id)
     fakeDB.splice(userToDelete, 1)
     return `This action removes a #${id} user`;
   }
