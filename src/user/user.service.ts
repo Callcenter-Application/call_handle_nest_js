@@ -17,9 +17,10 @@ const findUserIndex = (id: number) => {
 
 @Injectable()
 export class UserService {
+  
   create(createUserDto: CreateUserDto) {
     fakeDB.push(createUserDto)
-    return 'This action adds a new user';
+    return createUserDto;
   }
 
   findAll() {

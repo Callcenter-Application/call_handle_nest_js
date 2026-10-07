@@ -7,9 +7,9 @@ async function bootstrap() {
     instrument: ObserveInstrument,
   });
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
-    .setVersion('1.0')
+    .setTitle('CallBook')
+    .setDescription('This is the second version of my callcenter backend')
+    .setVersion('2.0')
     .addTag('Handler')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
@@ -18,5 +18,6 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`API is running in http://localhost:${port}`);
   console.log(`Swagger is running in http://localhost:${port}/docs`)
+
 }
 await bootstrap();
