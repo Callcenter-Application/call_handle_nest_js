@@ -3,15 +3,32 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { UserModule } from './user/user.module.js';
-// import { TypeOrmModule } from '@nestjs/typeorm'; ===> Tengo que configurar esto bien.
-// import { ConfigModule } from '@nestjs/config'; ===> Esta parte tambien es necesaria. 
-// import configuration from './config/configuration.js';
+import { TypeOrmModule } from '@nestjs/typeorm'; //===> Tengo que configurar esto bien.
+import { ConfigModule, ConfigService } from '@nestjs/config'; 
+import configuration from './config/configuration.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
-    UserModule
+    UserModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration]
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get<string>('database.host'),
+        port: config.get<number>('database.port'),
+        username: config.get<string>('database.username'),
+        password: config.get<string>('database.password'),
+        database: config.get<string>('database.name'),
+        autoLoadEntities: true, // registers every entity added via forFeature()
+        synchronize: true, // creates/updates tables from entities (development only)
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
